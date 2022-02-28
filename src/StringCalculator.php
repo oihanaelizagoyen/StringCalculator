@@ -10,37 +10,80 @@ class StringCalculator
     public function add (String $inputString) : String
     {
         if ($inputString == ""){
+
             return "0";
+
         }
 
-        $splitString = preg_split("/[,|\n]/", $inputString);
+        if(str_starts_with($inputString, "//")){
+
+            $newlinePosition = strpos($inputString, "\n");
+            $characterByCharacter =  $inputString;
+
+            $separators[0] = "";
+            for($currentPosition = 2; $currentPosition < $newlinePosition; $currentPosition++){
+                $separators[0] = $separators[0] . $characterByCharacter[$currentPosition];
+            }
+
+            $inputString = "";
+            for($currentPosition = $newlinePosition+1; $currentPosition < strlen($characterByCharacter); $currentPosition++){
+                $inputString .= $characterByCharacter[$currentPosition];
+            }
+
+            $splitString = explode($separators[0], $inputString);
+        }
+        else{
+
+            $separators[] = ",";
+            $separators[] = "\n";
+
+            $splitString = preg_split("/[,|\n]/", $inputString);
+        }
+
         $sum = 0;
 
-        for($current_position = 0; $current_position < count($splitString); $current_position++){
-            if($splitString[$current_position] == ""){
-                if(str_contains($inputString, ",\n")){
-                    $position = strpos($inputString,",\n") + 1;
-                    $separator = "\\n";
+        for($currentPosition = 0; $currentPosition < count($splitString); $currentPosition++){
+            if($splitString[$currentPosition] == ""){
+
+                $position = 1;
+
+                while (!($this->isASeparator($inputString[$position-1],$separators) && $this->isASeparator($inputString[$position], $separators))
+                        && !($position == (strlen($inputString)-1))){
+                    $position++;
                 }
-                elseif(str_contains($inputString, "\n,")){
-                    $position = strpos($inputString,"\n,") + 1;
-                    $separator = ",";
-                }
-                elseif (str_contains($inputString, ",,")){
-                    $position = strpos($inputString,",,") + 1;
-                    $separator = ",";
-                }
-                elseif (str_contains($inputString, "\n\n")){
-                    $position = strpos($inputString,"\n\n") + 1;
-                    $separator = "\\n";
+                if($position == (strlen($inputString) - 1)){
+
+                    return "Number expected but NOT found.";
+
                 }
                 else{
-                    return "Number expected but NOT found.";
+                    if($inputString[$position] == "\n"){
+                        $separator = "\\n";
+                    }
+                    else{
+                        $separator = $inputString[$position];
+                    }
+
+                    return "Number expected but $separator found at position $position.";
+
                 }
-                return "Number expected but $separator found at position $position.";
             }
-            $sum = $sum + (double)$splitString[$current_position];
+            $sum = $sum + (double)$splitString[$currentPosition];
         }
+
         return $sum;
+    }
+
+    public function isASeparator(String $possibleSeparator, array $separators): bool
+    {
+        for ($currentPosition = 0; $currentPosition < count($separators); $currentPosition++){
+            if($possibleSeparator == $separators[$currentPosition]){
+
+                return true;
+
+            }
+        }
+
+        return false;
     }
 }

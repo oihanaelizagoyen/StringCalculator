@@ -51,7 +51,7 @@ class StringCalculatorTest extends TestCase
     /**
      * @test
      */
-    public function unknown_number_of_numbers_string_returns_sum_string()
+    public function string_with_unknown_number_of_numbers_returns_sum_string()
     {
         $returnedString = $this->stringCalculator->add("1.1,2.2,1.1,2.2");
 
@@ -61,7 +61,7 @@ class StringCalculatorTest extends TestCase
     /**
      * @test
      */
-    public function newline_as_separator_string_returns_sum_string()
+    public function string_with_newline_as_separator_returns_sum_string()
     {
         $returnedString = $this->stringCalculator->add("1\n2,3");
 
@@ -71,7 +71,7 @@ class StringCalculatorTest extends TestCase
     /**
      * @test
      */
-    public function separator_instead_of_number_string_returns_error_message()
+    public function string_with_separator_instead_of_number_returns_error_message()
     {
         $returnedString = $this->stringCalculator->add("175.2,\n35");
 
@@ -81,10 +81,20 @@ class StringCalculatorTest extends TestCase
     /**
      * @test
      */
-    public function ended_in_separator_string_returns_error_message()
+    public function string_ended_in_separator_returns_error_message()
     {
         $returnedString = $this->stringCalculator->add("1,3,");
 
         $this->assertEquals("Number expected but NOT found.", $returnedString);
+    }
+
+    /**
+     * @test
+     */
+    public function string_with_new_separator_returns_sum_string()
+    {
+        $returnedString = $this->stringCalculator->add("//;\n1;2");
+
+        $this->assertEquals("3", $returnedString);
     }
 }
