@@ -57,4 +57,14 @@ class StringCalculatorTest extends TestCase
 
         $this->assertEquals("6.6", $returnedString);
     }
+
+    /**
+     * @test
+     */
+    public function newline_as_separator_string_returns_sum_string()
+    {
+        $returnedString = $this->stringCalculator->add("1\n2,3");
+
+        $this->assertEquals("6", $returnedString);
+    }
 }
