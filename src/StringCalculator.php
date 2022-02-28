@@ -40,6 +40,8 @@ class StringCalculator
             $splitString = preg_split("/[,|\n]/", $inputString);
         }
 
+        $errorMessages = "";
+        $negativesChecked = false;
         $sum = 0;
 
         for($currentPosition = 0; $currentPosition < count($splitString); $currentPosition++){
@@ -53,7 +55,7 @@ class StringCalculator
                 }
                 if($position == (strlen($inputString) - 1)){
 
-                    return "Number expected but NOT found.";
+                    $errorMessages = $this->concatenateErrorMessage($errorMessages, "Number expected but NOT found.");
 
                 }
                 else{
@@ -64,7 +66,7 @@ class StringCalculator
                         $separator = $inputString[$position];
                     }
 
-                    return "Number expected but $separator found at position $position.";
+                    $errorMessages = $this->concatenateErrorMessage($errorMessages, "Number expected but '$separator' found at position $position.");
 
                 }
             }
@@ -78,10 +80,10 @@ class StringCalculator
                 $separator = $splitString[$currentPosition][$position];
                 $position = $position + strpos($inputString, $splitString[$currentPosition]);
 
-                return "'$separators[0]' expected but '$separator' found at position $position.";
+                $errorMessages = $this->concatenateErrorMessage($errorMessages, "'$separators[0]' expected but '$separator' found at position $position.");
 
             }
-            elseif ((double)$splitString[$currentPosition] < 0){
+            elseif (((double)$splitString[$currentPosition] < 0) && !$negativesChecked){
 
                 $negatives = $splitString[$currentPosition];
 
@@ -91,14 +93,24 @@ class StringCalculator
                     }
                 }
 
-                return "Negative not allowed : $negatives";
+                $errorMessages = $this->concatenateErrorMessage($errorMessages, "Negative not allowed : $negatives");
+
+                $negativesChecked = true;
 
             }
-            $sum = $sum + (double)$splitString[$currentPosition];
+            else{
+                $sum = $sum + (double)$splitString[$currentPosition];
+            }
+        }
+        if($errorMessages != ""){
+
+            return $errorMessages;
+
         }
 
         return $sum;
     }
+
 
     public function isASeparator(String $possibleSeparator, array $separators): bool
     {
@@ -111,5 +123,16 @@ class StringCalculator
         }
 
         return false;
+    }
+
+
+    public function concatenateErrorMessage(String $errorMessages, String $stringToConcatenate):String
+    {
+        if($errorMessages != ""){
+            $errorMessages .= "\n";
+        }
+        $errorMessages .= $stringToConcatenate;
+
+        return $errorMessages;
     }
 }

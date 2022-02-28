@@ -75,7 +75,7 @@ class StringCalculatorTest extends TestCase
     {
         $returnedString = $this->stringCalculator->add("175.2,\n35");
 
-        $this->assertEquals("Number expected but \\n found at position 6.", $returnedString);
+        $this->assertEquals("Number expected but '\\n' found at position 6.", $returnedString);
     }
 
     /**
@@ -116,5 +116,15 @@ class StringCalculatorTest extends TestCase
         $returnedString = $this->stringCalculator->add("2,-4,-5");
 
         $this->assertEquals("Negative not allowed : -4, -5", $returnedString);
+    }
+
+    /**
+     * @test
+     */
+    public function string_with_multiple_errors_returns_all_error_messages()
+    {
+        $returnedString = $this->stringCalculator->add("-1,,2");
+
+        $this->assertEquals("Negative not allowed : -1\nNumber expected but ',' found at position 3.", $returnedString);
     }
 }
