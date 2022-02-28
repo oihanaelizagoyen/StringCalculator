@@ -7,14 +7,23 @@ use PHPUnit\Framework\TestCase;
 
 class StringCalculatorTest extends TestCase
 {
+    private StringCalculator $stringCalculator;
+
+    /**
+     * @setUp
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->stringCalculator = new StringCalculator();
+    }
+
     /**
      * @test
      */
     public function empty_string_returns_string_0()
     {
-        $stringCalculator = new StringCalculator();
-
-        $returnedString = $stringCalculator->add("");
+        $returnedString = $this->stringCalculator->add("");
 
         $this->assertEquals("0", $returnedString);
     }
@@ -24,9 +33,7 @@ class StringCalculatorTest extends TestCase
      */
     public function one_number_string_returns_same_string()
     {
-        $stringCalculator = new StringCalculator();
-
-        $returnedString = $stringCalculator->add("1");
+        $returnedString = $this->stringCalculator->add("1");
 
         $this->assertEquals("1", $returnedString);
     }
@@ -36,10 +43,18 @@ class StringCalculatorTest extends TestCase
      */
     public function two_numbers_string_returns_sum_string()
     {
-        $stringCalculator = new StringCalculator();
-
-        $returnedString = $stringCalculator->add("1.1,2.2");
+        $returnedString = $this->stringCalculator->add("1.1,2.2");
 
         $this->assertEquals("3.3", $returnedString);
+    }
+
+    /**
+     * @test
+     */
+    public function unknown_number_of_numbers_string_returns_sum_string()
+    {
+        $returnedString = $this->stringCalculator->add("1.1,2.2,1.1,2.2");
+
+        $this->assertEquals("6.6", $returnedString);
     }
 }
