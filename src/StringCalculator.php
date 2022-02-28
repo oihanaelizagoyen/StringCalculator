@@ -81,6 +81,19 @@ class StringCalculator
                 return "'$separators[0]' expected but '$separator' found at position $position.";
 
             }
+            elseif ((double)$splitString[$currentPosition] < 0){
+
+                $negatives = $splitString[$currentPosition];
+
+                for($position = $currentPosition+1; $position < count($splitString); $position++){
+                    if(is_numeric($splitString[$position]) && ($splitString[$position] < 0)){
+                        $negatives .= ", " . $splitString[$position];
+                    }
+                }
+
+                return "Negative not allowed : $negatives";
+
+            }
             $sum = $sum + (double)$splitString[$currentPosition];
         }
 
