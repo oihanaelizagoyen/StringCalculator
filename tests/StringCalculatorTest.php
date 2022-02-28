@@ -67,4 +67,14 @@ class StringCalculatorTest extends TestCase
 
         $this->assertEquals("6", $returnedString);
     }
+
+    /**
+     * @test
+     */
+    public function separator_instead_of_number_string_returns_error_message()
+    {
+        $returnedString = $this->stringCalculator->add("175.2,\n35");
+
+        $this->assertEquals("Number expected but \\n found at position 6.", $returnedString);
+    }
 }
