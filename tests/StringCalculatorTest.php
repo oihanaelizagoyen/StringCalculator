@@ -97,4 +97,14 @@ class StringCalculatorTest extends TestCase
 
         $this->assertEquals("3", $returnedString);
     }
+
+    /**
+     * @test
+     */
+    public function string_with_new_separator_but_uses_default_separators_returns_error_message()
+    {
+        $returnedString = $this->stringCalculator->add("//|\n1|2,3");
+
+        $this->assertEquals("'|' expected but ',' found at position 3.", $returnedString);
+    }
 }

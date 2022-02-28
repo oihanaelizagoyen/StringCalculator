@@ -18,16 +18,16 @@ class StringCalculator
         if(str_starts_with($inputString, "//")){
 
             $newlinePosition = strpos($inputString, "\n");
-            $characterByCharacter =  $inputString;
+            $copyOfInputString =  $inputString;
 
             $separators[0] = "";
             for($currentPosition = 2; $currentPosition < $newlinePosition; $currentPosition++){
-                $separators[0] = $separators[0] . $characterByCharacter[$currentPosition];
+                $separators[0] = $separators[0] . $copyOfInputString[$currentPosition];
             }
 
             $inputString = "";
-            for($currentPosition = $newlinePosition+1; $currentPosition < strlen($characterByCharacter); $currentPosition++){
-                $inputString .= $characterByCharacter[$currentPosition];
+            for($currentPosition = $newlinePosition+1; $currentPosition < strlen($copyOfInputString); $currentPosition++){
+                $inputString .= $copyOfInputString[$currentPosition];
             }
 
             $splitString = explode($separators[0], $inputString);
@@ -67,6 +67,19 @@ class StringCalculator
                     return "Number expected but $separator found at position $position.";
 
                 }
+            }
+            elseif (!is_numeric($splitString[$currentPosition])){
+
+                $position = 0;
+
+                while(is_numeric($splitString[$currentPosition][$position]) || $splitString[$currentPosition][$position] == "."){
+                    $position++;
+                }
+                $separator = $splitString[$currentPosition][$position];
+                $position = $position + strpos($inputString, $splitString[$currentPosition]);
+
+                return "'$separators[0]' expected but '$separator' found at position $position.";
+
             }
             $sum = $sum + (double)$splitString[$currentPosition];
         }
