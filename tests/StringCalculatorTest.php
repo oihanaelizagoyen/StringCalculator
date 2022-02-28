@@ -30,4 +30,16 @@ class StringCalculatorTest extends TestCase
 
         $this->assertEquals("1", $returnedString);
     }
+
+    /**
+     * @test
+     */
+    public function two_numbers_string_returns_sum_string()
+    {
+        $stringCalculator = new StringCalculator();
+
+        $returnedString = $stringCalculator->add("1.1,2.2");
+
+        $this->assertEquals("3.3", $returnedString);
+    }
 }
