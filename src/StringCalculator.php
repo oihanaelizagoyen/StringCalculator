@@ -22,9 +22,20 @@ class StringCalculator
                     $position = strpos($inputString,",\n") + 1;
                     $separator = "\\n";
                 }
-                else{
+                elseif(str_contains($inputString, "\n,")){
                     $position = strpos($inputString,"\n,") + 1;
                     $separator = ",";
+                }
+                elseif (str_contains($inputString, ",,")){
+                    $position = strpos($inputString,",,") + 1;
+                    $separator = ",";
+                }
+                elseif (str_contains($inputString, "\n\n")){
+                    $position = strpos($inputString,"\n\n") + 1;
+                    $separator = "\\n";
+                }
+                else{
+                    return "Number expected but NOT found.";
                 }
                 return "Number expected but $separator found at position $position.";
             }
